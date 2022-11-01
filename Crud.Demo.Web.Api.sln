@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Crud.Demo.Web.Api\Core\Core.csproj", "{AB3121DF-DCB2-466A-B84C-08176570D2B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Crud.Demo.Web.Api\Api\Api.csproj", "{578689B3-75AA-4F10-94A7-D9028140A10A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcApp", "MvcApp\MvcApp.csproj", "{A1669C1F-9885-43FC-B570-228379BC5FE8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB3121DF-DCB2-466A-B84C-08176570D2B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB3121DF-DCB2-466A-B84C-08176570D2B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB3121DF-DCB2-466A-B84C-08176570D2B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB3121DF-DCB2-466A-B84C-08176570D2B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{578689B3-75AA-4F10-94A7-D9028140A10A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578689B3-75AA-4F10-94A7-D9028140A10A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{578689B3-75AA-4F10-94A7-D9028140A10A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578689B3-75AA-4F10-94A7-D9028140A10A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1669C1F-9885-43FC-B570-228379BC5FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1669C1F-9885-43FC-B570-228379BC5FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1669C1F-9885-43FC-B570-228379BC5FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1669C1F-9885-43FC-B570-228379BC5FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22B06E4A-84F0-4534-8A96-2D93F4391212}
+	EndGlobalSection
+EndGlobal
