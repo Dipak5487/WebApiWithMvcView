@@ -1,0 +1,77 @@
+﻿@model Core.Dtos.SearchUserResponseDto
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<form method="get">
+    <div class="input-group">
+        <input class="form-control" asp-for="SearchField" />
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary" asp-controller="home" asp-action="search">Search</button>
+        </div>
+
+    </div>
+</form>
+
+<div class="text-center">
+
+    <h1>Welcome to the User Page</h1>
+    <table class="table table-bordered table-sm">
+        <thead class="thead-dark">
+            <tr style="border:groove">
+                <th>Id</th>
+                <th>User Name</th>
+                <th>Date of birth</th>
+                <th>Email Id</th>
+                <th>Mobile No</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        @if (Model.UserModels != null && Model.UserModels.Any())
+        {
+            <tbody>
+                @foreach (var item in Model.UserModels)
+                {
+                    <tr style="border:inset">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+
+                        </td>&nbsp;&nbsp;&nbsp;
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+
+                        </td>&nbsp;&nbsp;&nbsp;
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DOB)
+
+                        </td>&nbsp;&nbsp;&nbsp;
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmailId)
+
+                        </td>
+                        &nbsp;&nbsp;&nbsp;
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MobileNumber)
+
+                        </td>
+                        <td>
+                            <a class="btn btn-danger btn-group-sm" asp-controller="home" asp-action="delete" asp-route-id="@item.Id"> Delete</a>
+                            <a class="btn btn-primary btn-group-sm" asp-controller="home" asp-action="edit" asp-route-id="@item.Id"> Edit</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <h5 class="text-danger">Records No Found : 404</h5>
+        }
+    </table>
+    <h1>Total Count @Model.TotalCount</h1>
+
+</div>
