@@ -1,10 +1,12 @@
 ﻿using Core.Dtos;
 using Core.Interfaces;
 using Core.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [EnableCors("AllowMyOrigin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -42,6 +44,7 @@ namespace Api.Controllers
             return Ok(result);
         }
 
+        [EnableCors("AllowMyOrigin")]
         [HttpPost("user-create")]
         public async Task<ActionResult<int>> CreateUser([FromBody] UserModel userModel)
         {
