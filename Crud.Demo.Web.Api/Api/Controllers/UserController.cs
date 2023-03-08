@@ -3,6 +3,9 @@ using Core.Interfaces;
 using Core.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using OpenAI_API;
+using OpenAI_API.Completions;
 
 namespace Api.Controllers
 {
@@ -12,9 +15,39 @@ namespace Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IConfiguration _configuration;
+        public UserController(IUserService userService, IConfiguration configuration)
         {
             _userService = userService;
+            _configuration = configuration;
+        }
+
+        [HttpPost("open-ai")]
+        public async Task<ActionResult<string>>GetAnswer([FromBody]string question)
+        {
+            var apikey = _configuration.GetValue<string>("OpenAPIKey");
+            string answer = string.Empty;
+            var openApi = new OpenAIAPI(apikey);
+            try
+            {
+                CompletionRequest completion = new CompletionRequest();
+                completion.Prompt = question;
+                completion.Model = OpenAI_API.Models.Model.DavinciText;
+                completion.MaxTokens = 8000;
+                var json = JsonConvert.SerializeObject(question);
+                var result = await openApi.Completions.CreateCompletionAsync(json);
+                foreach(var item in result.Completions)
+                {
+                    answer = item.Text;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+            return Ok(answer);
+            
         }
 
         [HttpGet("get-all")]
