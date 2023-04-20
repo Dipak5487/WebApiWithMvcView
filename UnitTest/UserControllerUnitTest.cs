@@ -4,6 +4,7 @@ using Core.Dtos;
 using Core.Interfaces;
 using Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Moq;
 
 namespace UnitTest
@@ -13,6 +14,7 @@ namespace UnitTest
         private readonly UserController _userController;
         private readonly IUserService _userService;
         private readonly Mock<IUserRepository> _userRepository;
+        private readonly Mock<IConfiguration> _config;
         public UserControllerUnitTest()
         {
             _userRepository = new Mock<IUserRepository>();
@@ -23,9 +25,9 @@ namespace UnitTest
             _userRepository.Setup(x => x.DeleteAsync(It.IsAny<int>())).ReturnsAsync("Success");
             _userRepository.Setup(x => x.UpdateAsync(It.IsAny<int>(),It.IsAny<UserModel>())).ReturnsAsync(GetModelList().First());
             _userRepository.Setup(x => x.Search(It.IsAny<string>())).ReturnsAsync(new SearchUserResponseDto() { TotalCount=3,UserModels= GetModelList() });
-           
-            _userService = new UserService(_userRepository.Object);
-            _userController = new UserController(_userService);
+            _config = new Mock<IConfiguration>();
+             _userService = new UserService(_userRepository.Object);
+            _userController = new UserController(_userService, _config.Object);
         }
         [Fact]
         public async Task CreateUser()

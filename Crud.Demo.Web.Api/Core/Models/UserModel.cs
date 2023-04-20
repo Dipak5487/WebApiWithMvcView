@@ -14,7 +14,7 @@ namespace Core.Models
         public int Id { get; set; }
         public string Name { get; set; }
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime DOB { get; set; }        
         [Required, DataType(DataType.EmailAddress,ErrorMessage ="Provide valid Email id.")]
         public string EmailId { get; set; }

@@ -1,6 +1,8 @@
-﻿using Core.Dtos;
+﻿using Api.Model;
+using Core.Dtos;
 using Core.Interfaces;
 using Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -49,7 +51,7 @@ namespace Api.Controllers
             return Ok(answer);
             
         }
-
+        [Authorize]
         [HttpGet("get-all")]
         public async Task<ActionResult<List<UserModel>>> FindAll()
         {
@@ -110,6 +112,7 @@ namespace Api.Controllers
             return Ok(result);
         }
 
+        [Authorize(Policy =IdentityModel.AdminPolicyName)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string?>> Delete(int id)
         {
@@ -136,6 +139,21 @@ namespace Api.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpGet("oneof")]
+        public async Task<ActionResult>GetOneOf(string searchField, int id)
+        {
+            var result = await _userService.GetDataOneOf(searchField, id);
+            if(result.IsT0)
+            {
+                return Ok(result.AsT0);
+            }
+            if(result.IsT1)
+            {
+                return Ok(result.AsT1);
+            }
+            return NotFound();
         }
     }
 }

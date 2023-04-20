@@ -1,5 +1,6 @@
 ﻿using Core.Dtos;
 using Core.Models;
+using OneOf;
 using System.Reflection.Metadata;
 
 namespace Core.Interfaces
@@ -12,5 +13,6 @@ namespace Core.Interfaces
         Task<string> DeleteAsync(int id);
         Task<UserModel?> UpdateAsync(int id, UserModel userModel);
         Task<SearchUserResponseDto> Search(string searchField);
+        Task<OneOf<SearchUserResponseDto, UserModel>> GetDataOneOf(string searchField, int id);
     }
 }
