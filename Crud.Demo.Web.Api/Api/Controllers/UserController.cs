@@ -11,7 +11,7 @@ using OpenAI_API.Completions;
 
 namespace Api.Controllers
 {
-    [EnableCors("AllowMyOrigin")]
+    [EnableCors("*")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -51,6 +51,7 @@ namespace Api.Controllers
             return Ok(answer);
             
         }
+        [EnableCors("*")]
         [Authorize]
         [HttpGet("get-all")]
         public async Task<ActionResult<List<UserModel>>> FindAll()
@@ -58,7 +59,7 @@ namespace Api.Controllers
             var result = await _userService.FindAllAsync();
             if (!result.Any())
             {
-                return NotFound("Records Not found in database");
+                return Ok(new List<UserModel>());
             }
             return Ok(result);
         }
@@ -112,7 +113,7 @@ namespace Api.Controllers
             return Ok(result);
         }
 
-        [Authorize(Policy =IdentityModel.AdminPolicyName)]
+        //[Authorize(Policy =IdentityModel.AdminPolicyName)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string?>> Delete(int id)
         {

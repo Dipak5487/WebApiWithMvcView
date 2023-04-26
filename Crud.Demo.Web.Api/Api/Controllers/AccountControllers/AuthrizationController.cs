@@ -1,4 +1,5 @@
 ﻿using Core.Dtos;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -7,8 +8,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
-namespace Api.Controllers
+namespace Api.Controllers.AccountControllers
 {
+    [EnableCors("*")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthrizationController : ControllerBase
