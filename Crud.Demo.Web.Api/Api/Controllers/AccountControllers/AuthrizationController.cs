@@ -1,6 +1,9 @@
-﻿using Core.Dtos;
+﻿using Api.Model;
+using Core.Dtos;
+using Core.Models.AccountModel;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,33 +19,50 @@ namespace Api.Controllers.AccountControllers
     public class AuthrizationController : ControllerBase
     {
         private readonly IConfiguration _config;
-        public AuthrizationController(IConfiguration configuration)
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public AuthrizationController(IConfiguration configuration, SignInManager<IdentityUser> signInManager)
         {
             _config = configuration;
+            _signInManager = signInManager;
         }
         [HttpPost("GetToken")]
-        public IActionResult GetToken([FromBody] AuthModel authModel)
+        public async Task<ActionResult<AuthenticateResponse>> GetToken([FromBody] LogInModel logInModel)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSetting:Key"]!));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
+            Microsoft.AspNetCore.Identity.SignInResult signInResult = new Microsoft.AspNetCore.Identity.SignInResult();
+            if (ModelState.IsValid)
             {
-                new Claim(ClaimTypes.NameIdentifier,authModel.Username),
-                new Claim(ClaimTypes.Role,authModel.Role),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, authModel.Emailid),
-                new Claim(JwtRegisteredClaimNames.Email,authModel.Emailid),
-                new Claim("userid", authModel.Emailid)
-            };
-            var token = new JwtSecurityToken(
-                _config["JwtSetting:Issuer"],
-                _config["JwtSetting:Audiance"],
-                claims,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: credentials
-                );
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return Ok(jwt);
+                signInResult = await _signInManager.PasswordSignInAsync(logInModel.Email, logInModel.Password, logInModel.RememverMe, false);
+                if (signInResult.Succeeded)
+                {
+                    var loginCread = new UserLogInResponse();
+                    loginCread.Id = Guid.NewGuid().ToString();
+                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSetting:Key"]!));
+                    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                    var claims = new[]
+                    {
+                      new Claim(ClaimTypes.NameIdentifier,logInModel.Email),
+                      new Claim(ClaimTypes.Role,""),
+                      new Claim(JwtRegisteredClaimNames.Jti,loginCread.Id),
+                      new Claim(JwtRegisteredClaimNames.Sub, logInModel.Email),
+                      new Claim(JwtRegisteredClaimNames.Email,logInModel.Email),
+                      new Claim("userid", logInModel.Email)
+                     };
+                    var token = new JwtSecurityToken(
+                        _config["JwtSetting:Issuer"],
+                        _config["JwtSetting:Audiance"],
+                        claims,
+                        expires: DateTime.Now.AddMinutes(15),
+                        signingCredentials: credentials
+                        );
+                    var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+                    loginCread.Email = logInModel.Email;
+                    loginCread.Roll = "Admin";
+                    loginCread.RememverMe = logInModel.RememverMe;
+                    return Ok(new AuthenticateResponse(loginCread, jwt, signInResult));
+                }
+            }
+
+            return new UnauthorizedResult();
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Api.Infrastructure.Repository
             _userDbContext = userDbContext;
         }
 
-
         public async Task<int> CreateUserAsync(UserModel userModel)
         {
             try

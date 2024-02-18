@@ -13,5 +13,13 @@ namespace Core.Models.AccountModel
         public string Password { get; set; } = string.Empty;
         [Display(Name = "Remember Me")]
         public bool RememverMe { get; set; }
+
+        
+    }
+
+    public class UserLogInResponse : LogInModel
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Roll { get; set; } = string.Empty;
     }
 }

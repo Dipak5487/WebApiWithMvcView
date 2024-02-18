@@ -42,7 +42,7 @@ namespace UnitTest
         public async Task FindAllUser()
         {
             var result = await _userController.FindAll();
-            var okObject = result.Result as OkObjectResult;
+            var okObject = result as OkObjectResult;
             Assert.NotNull(okObject);
             Assert.True(okObject?.StatusCode == 200);
         }

@@ -11,6 +11,7 @@ using OpenAI_API.Completions;
 
 namespace Api.Controllers
 {
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     [EnableCors("*")]
     [Route("api/[controller]")]
     [ApiController]
@@ -51,10 +52,10 @@ namespace Api.Controllers
             return Ok(answer);
             
         }
-        [EnableCors("*")]
-        [Authorize]
+
+        
         [HttpGet("get-all")]
-        public async Task<ActionResult<List<UserModel>>> FindAll()
+        public async Task<IActionResult> FindAll()
         {
             var result = await _userService.FindAllAsync();
             if (!result.Any())
