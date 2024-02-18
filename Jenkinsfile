@@ -1,24 +1,43 @@
 pipeline {
-   agent any
-   stages{
-
-     stage ('Clean workspace') {
-          steps {
-           cleanWs()
-          }
+    agent {
+        docker { 
+      
+          image 'mcr.microsoft.com/dotnet/framework/sdk:4.8'
+          label 'windows'
         }
-
-      stage ('Git Checkout') {
-  steps {
-      git branch: 'main', credentialsId: 'demo-app-build', url: 'https://github.com/Dipak5487/WebApiWithMvcView.git'
+        
     }
-  }
-
-      stage('Restore packages') {
-  steps {
-    bat "dotnet restore ${workspace}\\WebApiWithMvcView\\Crud.Demo.Web.Api.sln"
-  }
-}
-   }
-   
+    stages {
+         stage('Restore nuget') {
+            steps {
+              
+              
+                bat 'dotnet restore' //for .NET core
+                bat 'nuget restore Crud.Demo.Web.Api.sln' // for .NET framework
+               
+            }
+        }
+        stage('Build') {
+            steps {
+               
+                bat 'dotnet build --configuration Release ./WebApiWithMvcView/Crud.Demo.Web.Api/Api/Api.csproj'           
+                bat 'msbuild Crud.Demo.Web.Api.sln /target:BigProject_NetFrameworkApp /p:Configuration=Release'
+               
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'dotnet test --logger trx ./WebApiWithMvcView/UnitTest/UnitTest.csproj'
+            }
+             post {
+                    always {
+                      //plugin: https://plugins.jenkins.io/mstest/
+                        mstest testResultsFile:"**/*.trx", keepLongStdio: true
+                    }
+        
+                }           
+        }
+        
+        
+    }
 }
