@@ -2,23 +2,23 @@ pipeline {
    agent any
    stages{
 
-     stage("build"){
-       steps {
-         echo 'bilding .net app'
-       }
-     }
+     stage ('Clean workspace') {
+          steps {
+           cleanWs()
+          }
+        }
 
-      stage("test"){
-       steps {
-         echo 'bilding .net test'
-       }
-     }
+      stage ('Git Checkout') {
+  steps {
+      git branch: 'main', credentialsId: 'demo-app-build', url: 'https://github.com/Dipak5487/WebApiWithMvcView.git'
+    }
+  }
 
-      stage("deploy"){
-       steps {
-           echo 'deploy .net app'
-       }
-     }
+      stage('Restore packages') {
+  steps {
+    bat "dotnet restore ${workspace}\\WebApiWithMvcView\\Crud.Demo.Web.Api.sln"
+  }
+}
    }
    
 }
